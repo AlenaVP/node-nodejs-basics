@@ -2,12 +2,12 @@ import { Transform } from 'stream';
 
 const transform = async () => {
     const reverseTransform = new Transform({
-        transform(chunk, encoding, callback) {
+        transform(chunk, _, callback) {
             const reversedChunk = chunk.toString().split('').reverse().join('');
             callback(null, reversedChunk);
         }
     });
-    process.stdin.pipe(process.stdout);
+    process.stdin.pipe(reverseTransform).pipe(process.stdout);
 
     reverseTransform.on('error', (err) => {
         console.error(`Error transforming data: ${err.message}`);
